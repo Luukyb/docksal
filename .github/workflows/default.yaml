@@ -32,11 +32,11 @@ jobs:
       matrix:
         suite:
           #- quicktest # Uncomment to run
-          - project
-          - config
-          - db
+          #- project
+          #- config
+          #- db
           - system
-          - commands
+          #- commands
           #- acquia
           #- pantheon
           #- platform

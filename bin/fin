@@ -6071,7 +6071,8 @@ sysinfo ()
 			echo "Debug info:"
 			echo "----------"
 			set -x
-			cat /etc/resolv.conf | grep ${DOCKSAL_IP}
+			ls -la /etc/resolv.conf
+			cat /etc/resolv.conf
 			ping -c 1 -W 1 dns-test.docksal
 			nslookup -timeout=1 dns-test.docksal ${DOCKSAL_IP}
 			set +x
