@@ -3492,7 +3492,7 @@ system_reset ()
 	fi
 
 	if [[ "$1" == "dns" ]] ; then
-		echo-green 'Resetting Docksal DNS service and configuring resolver for .docksal domain...'
+		echo-green "Resetting Docksal DNS service and configuring resolver for .${DOCKSAL_DNS_DOMAIN} domain..."
 		install_dns_service
 		configure_resolver
 		return
