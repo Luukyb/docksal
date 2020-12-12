@@ -92,9 +92,10 @@ DOCKSAL_DNS_DOMAIN=docksal.site
 	fin docker ps
 	# Actual Test
 	run curl -sL "http://${vhost}"
+	fin docker inspect nginx-test
+	fin docker logs docksal-vhost-proxy
 	# Cleanup first
 	fin docker rm -vf nginx-test
-	fin docker logs vhost-proxy
 	# Parsing test output
 	echo "$output" | grep 'Welcome to nginx!'
 	unset output
