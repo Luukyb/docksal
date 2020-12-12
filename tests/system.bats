@@ -37,7 +37,7 @@ DOCKSAL_DNS_DOMAIN=docksal.site
 	[[ $SKIP == 1 ]] && skip
 
 	run fin system reset dns
-	echo "$output" | grep "Resetting Docksal DNS service and configuring resolver for .docksal domain"
+	echo "$output" | grep "Resetting Docksal DNS service and configuring resolver for ${DOCKSAL_DNS_DOMAIN} domain"
 	unset output
 
 	# Wait 2s to let the service fully initialize
@@ -49,22 +49,22 @@ DOCKSAL_DNS_DOMAIN=docksal.site
 	unset output
 }
 
-@test "DNS: .docksal name resolution via ping" {
+@test "DNS: ${DOCKSAL_DNS_DOMAIN} name resolution via ping" {
 	[[ $SKIP == 1 ]] && skip
 
-	# .docksal domain resolution via ping
-	run ping -c 1 -W 1 anything.docksal
+	# Docksal domain resolution via ping
+	run ping -c 1 -W 1 anything.${DOCKSAL_DNS_DOMAIN}
 	[[ "$(echo \"$output\" | awk -F'[()]' '/PING/{print $2}')" == "$DOCKSAL_IP" ]]
 	unset output
 }
 
-@test "DNS: .docksal name resolution via nslookup (pointed to docksal-dns)" {
+@test "DNS: ${DOCKSAL_DNS_DOMAIN} name resolution via nslookup (pointed to docksal-dns)" {
 	[[ $SKIP == 1 ]] && skip
 
-	# .docksal domain resolution via nslookup
+	# Docksal domain resolution via nslookup
 	# Unfortunately, nslookup does not reliably resolve .docksal.
 	# This test is only verifying that docksal-dns replies to direct nslookup requests.
-	run nslookup anything.docksal ${DOCKSAL_IP}
+	run nslookup anything.${DOCKSAL_DNS_DOMAIN} ${DOCKSAL_IP}
 	[[ "$status" == 0 ]]
 	unset output
 }
@@ -198,10 +198,10 @@ DOCKSAL_DNS_DOMAIN=docksal.site
 @test "DNS: .docksal name resolution inside cli" {
 	[[ $SKIP == 1 ]] && skip
 
-	# .docksal domain resolution via nslookup
+	# Docksal domain resolution via nslookup
 	# Unfortunately, nslookup does not reliably resolve .docksal.
 	# This test is only verifying that docksal-dns replies to direct nslookup requests.
-	run fin rc nslookup anything.docksal ${DOCKSAL_IP}
+	run fin rc nslookup anything.${DOCKSAL_DNS_DOMAIN} ${DOCKSAL_IP}
 	[[ "$status" == 0 ]]
 	unset output
 }
