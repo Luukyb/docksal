@@ -88,9 +88,10 @@ DOCKSAL_DNS_DOMAIN=docksal.site
 	# Start an nginx container with a custom virtual host assigned
 	vhost="nginx.${DOCKSAL_DNS_DOMAIN}"
 	fin docker run -d --name nginx-test --label "io.docksal.virtual-host=${vhost}" -e "VIRTUAL_HOST=${vhost}" nginx:alpine
-	sleep 5
+	sleep 2
+	fin docker ps | grep nginx-test
 	# Actual Test
-	run bash -c "set -x; curl -sL 'http://${vhost}'"
+	run curl -sL "http://${vhost}"
 	# Cleanup first
 	fin docker rm -vf nginx-test
 	# Parsing test output
