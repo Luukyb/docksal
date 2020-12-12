@@ -37,7 +37,7 @@ DOCKSAL_DNS_DOMAIN=docksal.site
 	[[ $SKIP == 1 ]] && skip
 
 	run fin system reset dns
-	echo "$output" | grep "Resetting Docksal DNS service and configuring resolver for ${DOCKSAL_DNS_DOMAIN} domain"
+	echo "$output" | grep "Resetting Docksal DNS service and configuring resolver for .${DOCKSAL_DNS_DOMAIN} domain"
 	unset output
 
 	# Wait 2s to let the service fully initialize
