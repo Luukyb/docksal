@@ -1,0 +1,53 @@
+ARG DOCKER_VERSION=18.03.1
+
+FROM docker:${DOCKER_VERSION}-dind
+#FROM franela/dind
+
+ARG DOCKER_UID=1000
+ARG DOCKER_GID=1000
+ARG DOCKER_COMPOSE_VERSION=1.21.1
+
+RUN set -xe; \
+	apk add --update --no-cache \
+		bash \
+		bash-completion \
+		curl \
+		git \
+		#python3 \
+		py2-pip \
+		sudo \
+		util-linux \
+		vim \
+	;\
+	rm -rf /var/cache/apk/*;
+
+RUN set -xe; \
+	# Install Docker Compose
+	pip install "docker-compose==${DOCKER_COMPOSE_VERSION}" >/dev/null; \
+	docker-compose --version; \
+	\
+	# Replace modprobe with a no-op to get rid of spurious warnings
+	# (note: we can't just symlink to /bin/true because it might be busybox)
+	rm /sbin/modprobe && echo '#!/bin/true' >/sbin/modprobe && chmod +x /sbin/modprobe;
+
+RUN set -xe; \
+	# Create a regular user/group "docker" (uid = 1000, gid = 1000 ) with access to sudo
+	addgroup -g "${DOCKER_UID}" -S docker; \
+	adduser -u "${DOCKER_GID}" -D -S -s /bin/bash -G docker docker; \
+	sed -i~ '/^docker/s/!/*/' /etc/shadow; \
+	echo 'docker ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers;
+
+# Set HOME as a build argument, so it can be used in all build commands, but does not propagete into the image
+ARG HOME=/home/docker
+
+COPY bin/fin /usr/local/bin
+COPY --chown=docker:docker stacks $HOME/.docksal/stacks
+
+RUN set -xe; \
+	touch $HOME/.docksal/docksal.env; \
+	echo 'CI=1' >> $HOME/.docksal/docksal.env; \
+	fin -v
+
+VOLUME $HOME
+
+WORKDIR $HOME
