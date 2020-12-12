@@ -96,22 +96,22 @@ jobs:
         run: fin update
         env:
           DOCKSAL_VERSION: ${{ steps.use_branch.outputs.branch }}
-      -
-        name: "Configure resolv.conf"
-        run: |
-          #set -xeuo pipefail
-          set -x
-          ls -la /etc/resolv.conf
-          cat /etc/resolv.conf
-          resolvectl status
-          sudo systemctl enable systemd-resolved.service
-          sudo mkdir -p /etc/resolvconf/resolv.conf.d
-          echo nameserver 192.168.64.100 | sudo tee -a /etc/resolvconf/resolv.conf.d/head
-          #sudo ln -s /usr/bin/resolvectl /usr/local/bin/resolvconf
-          #sudo resolvconf --enable-updates
-          #sudo resolvconf -u
-          cat /etc/resolv.conf
-          resolvectl status
+#      -
+#        name: "Configure resolv.conf"
+#        run: |
+#          #set -xeuo pipefail
+#          set -x
+#          ls -la /etc/resolv.conf
+#          cat /etc/resolv.conf
+#          resolvectl status
+#          sudo systemctl enable systemd-resolved.service
+#          sudo mkdir -p /etc/resolvconf/resolv.conf.d
+#          echo nameserver 192.168.64.100 | sudo tee -a /etc/resolvconf/resolv.conf.d/head
+#          #sudo ln -s /usr/bin/resolvectl /usr/local/bin/resolvconf
+#          #sudo resolvconf --enable-updates
+#          #sudo resolvconf -u
+#          cat /etc/resolv.conf
+#          resolvectl status
       -
         name: "Get information about system"
         run: fin sysinfo
