@@ -117,10 +117,18 @@ jobs:
         name: "Get information about system"
         run: fin sysinfo
       -
-        name: "Execute tests"
-        run: tests/scripts/${SUITE}.sh
-        env:
-          SUITE: ${{ matrix.suite }}
+        name: Debug
+        run: |
+          set -x
+          fin rc uname
+          fin rc echo 1 | hexdump
+          fin rc -T echo 1 | hexdump
+          [[ "$(fin rc echo)" != "$(fin rc -T echo)" ]]; echo $?
+#      -
+#        name: "Execute tests"
+#        run: tests/scripts/${SUITE}.sh
+#        env:
+#          SUITE: ${{ matrix.suite }}
       # Commenting out at the moment until repos are converted over to GithuB Actions
       #-
       #   if: ${{ matrix.suite }} == "project"
